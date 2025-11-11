@@ -1,0 +1,115 @@
+/* TYPOGRAPHY STILIAI */
+
+/* a. Pakeičiame svetainės šriftų šeimą */
+body {
+    font-family: "Lucida Calligraphy", cursive;
+    font-size: 16px;
+    line-height: 1.6;
+    color: #222;
+    background-color: #fff;
+    margin: 0;
+    padding: 0;
+}
+
+/* b. Antraščių stiliai (h1–h6)
+   Kiekviena antraštė turi skirtingą dydį, spalvą ir kitus parametrus */
+h1, h2, h3, h4, h5, h6 {
+    font-family: "Lucida Calligraphy", cursive;
+    font-weight: 700;
+    margin-top: 1.2em;
+    margin-bottom: 0.6em;
+    line-height: 1.2;
+    letter-spacing: 0.5px;
+}
+
+/* Skirtingų lygių antraštės */
+h1 {
+    font-size: 2.5rem;
+    color: #8830da;
+    text-transform: uppercase;
+    border-bottom: 3px solid #8830da;
+    padding-bottom: 0.3em;
+}
+
+h2 {
+    font-size: 2rem;
+    color: #8830da;
+    font-weight: 600;
+}
+
+h3 {
+    font-size: 1.75rem;
+    color: #8830da;
+    letter-spacing: 1px;
+}
+
+h4 {
+    font-size: 1.5rem;
+    color: #8830da;
+    font-weight: 500;
+}
+
+h5 {
+    font-size: 1.25rem;
+    color: #8830da;
+    font-style: italic;
+}
+
+h6 {
+    font-size: 1rem;
+    color: #8830da;
+    font-weight: 400;
+    letter-spacing: 2px;
+}
+
+/* Pastraipos */
+p {
+    font-family: "Lucida Handwriting", cursive;
+    font-size: 1rem;
+    line-height: 1.8;
+    color: #333;
+    margin-bottom: 1em;
+}
+
+/* Papildomas akcentas nuorodoms */
+a {
+    color: #8830da;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+a:hover {
+    color: #1a237e;
+    text-decoration: underline;
+}
+
+
+/* Paprasti violetiniai nuorodų mygtukai */
+.btn {
+  background-color: #8e44ad;   /* pagrindinė spalva */
+  color: #ffffff;              /* teksto spalva */
+  text-decoration: none;       /* be pabraukimo */
+  padding: 10px 20px;          /* tarpai aplink tekstą */
+  border-radius: 5px;          /* švelnios kraštinės */
+  font-size: 16px;
+  font-weight: 600;
+  display: inline-block;       /* kad galėtų turėti padding */
+  text-align: center;
+  line-height: 1.5;            /* vertikalus centras */
+  transition: background-color 0.3s ease; /* lengvas hover efektas */
+  cursor: pointer;
+}
+
+/* Hover efektas */
+.btn:hover {
+  background-color: #732d91;   /* tamsesnė violetinė */
+}
+
+/* Paspaudus mygtuką */
+.btn:active {
+  background-color: #5e3370;   /* dar tamsesnė violetinė */
+}
+
+
+
+
