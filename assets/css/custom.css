@@ -311,3 +311,118 @@ a:active {
   background: #ede7f6;
 }
 
+/* === 1 užduotis: CSS animacijos su @keyframes === */
+
+/* 1) Hero fono paveikslėlis iš pilko į spalvotą */
+@keyframes hero-bg-pulse {
+  0% {
+    filter: grayscale(100%);
+    transform: scale(1);
+  }
+  50% {
+    filter: grayscale(0%);
+    transform: scale(1.03);
+  }
+  100% {
+    filter: grayscale(100%);
+    transform: scale(1);
+  }
+}
+
+#hero img {
+  display: block;
+  animation: hero-bg-pulse 6s ease-in-out infinite;
+}
+
+/* 2) Socialinių ikonų aiškus „šokinėjimas“ */
+@keyframes social-bounce-strong {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.hero .social-links a {
+  display: inline-flex;
+  animation: social-bounce-strong 1.4s ease-in-out infinite;
+}
+
+/* šiek tiek nevienodas „ritmas“ ikonėlėms */
+.hero .social-links a:nth-child(2) { animation-delay: 0.15s; }
+.hero .social-links a:nth-child(3) { animation-delay: 0.30s; }
+.hero .social-links a:nth-child(4) { animation-delay: 0.45s; }
+
+/* === 2 užduotis: puslapio krovimo animacija === */
+
+#preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: radial-gradient(circle at top, #f3e5f5 0, #fdf7ff 45%, #fdf7ff 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+/* trys pulsuojantys taškeliai – dabar tikrai centre */
+#preloader::before {
+  content: "";
+  position: static;                 /* svarbu – nuimam fixed/top/left iš šablono */
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #8e24aa;
+  box-shadow: -24px 0 0 #ce93d8, 24px 0 0 #5e35b1;
+  animation: preloader-dots 0.9s ease-in-out infinite;
+  margin-bottom: 16px;              /* tarpas iki teksto */
+}
+
+/* „Kraunama...“ tekstas po taškeliais */
+#preloader::after {
+  content: "Kraunama";
+  font-family: "Trebuchet MS", "Segoe UI", Arial, sans-serif;
+  font-size: 0.95rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #5e35b1;
+}
+
+/* taškelių animacija */
+@keyframes preloader-dots {
+  0% {
+    transform: translateY(0);
+    box-shadow: -24px 0 0 #ce93d8, 24px 0 0 #5e35b1;
+  }
+  50% {
+    transform: translateY(-8px);
+    box-shadow: -24px 0 0 #5e35b1, 24px 0 0 #ce93d8;
+  }
+  100% {
+    transform: translateY(0);
+    box-shadow: -24px 0 0 #ce93d8, 24px 0 0 #5e35b1;
+  }
+}
+
+/* 3. Pritaikymas vartotojams su judesio jautrumu */
+@media (prefers-reduced-motion: reduce) {
+
+  /* Hero fonas – be pulsuojančios animacijos */
+  #hero img {
+    animation: none !important;
+    filter: none;          /* paliekam normalų spalvotą vaizdą */
+    transform: none;
+  }
+
+  /* Social ikonėlės nebešokinėja */
+  .hero .social-links a {
+    animation: none !important;
+  }
+
+  /* Preloaderio taškai – statiški, be šokinėjimo */
+  #preloader::before {
+    animation: none !important;
+  }
+}
