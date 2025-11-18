@@ -405,9 +405,108 @@ a:active {
     box-shadow: -24px 0 0 #ce93d8, 24px 0 0 #5e35b1;
   }
 }
+/* Ryškesnis, aiškiai matomas animuotas gradientas Services sekcijai */
+#services {
+  background: linear-gradient(135deg,
+    #6600ff,
+    #b17dcb,
+    #d070ca,
+    #ff00b3);
+  background-size: 400% 400%;
+  animation: services-gradient 10s ease-in-out infinite;
+}
+
+/* kortelės ant ryškaus fono – švarios baltos */
+#services .service-item {
+  background: #ffffff;
+  border-radius: 18px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+}
+
+/* pats gradiento „vaikščiojimas“ */
+@keyframes services-gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  25% {
+    background-position: 50% 0%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  75% {
+    background-position: 50% 100%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* --- Apie sekcijos animuotos CSS figūros --- */
+
+#about {
+  position: relative;
+  overflow: hidden; /* kad figūrų kraštai neitų už sekcijos ribų */
+}
+
+/* 1) Didelis plaukiojantis apskritimas kairėje */
+#about::before {
+  content: "";
+  position: absolute;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(142,36,170,0.28), rgba(142,36,170,0));
+  top: -60px;
+  left: -40px;
+  animation: about-float 10s ease-in-out infinite;
+}
+
+/* 2) Sukantis „deimantas“ (kvadratas) dešinėje apačioje */
+#about::after {
+  content: "";
+  position: absolute;
+  width: 140px;
+  height: 140px;
+  background: rgba(126,87,194,0.18);
+  border-radius: 24px;
+  bottom: -40px;
+  right: -20px;
+  transform-origin: center;
+  animation: about-rotate-scale 12s linear infinite;
+}
+
+/* plaukiojimo animacija (floating) */
+@keyframes about-float {
+  0%   { transform: translate(0, 0); }
+  25%  { transform: translate(25px, 20px); }
+  50%  { transform: translate(0, 40px); }
+  75%  { transform: translate(-20px, 20px); }
+  100% { transform: translate(0, 0); }
+}
+
+/* sukimosi + dydžio keitimo animacija (rotating + scaling) */
+@keyframes about-rotate-scale {
+  0%   { transform: rotate(0deg)   scale(0.9); }
+  50%  { transform: rotate(180deg) scale(1.1); }
+  100% { transform: rotate(360deg) scale(0.9); }
+}
+
+
 
 /* 3. Pritaikymas vartotojams su judesio jautrumu */
 @media (prefers-reduced-motion: reduce) {
+
+    #services {
+    animation: none !important;
+    background-position: 50% 50%;
+  }
+  
+  #about::before,
+  #about::after {
+    animation: none !important;
+  }
+
 
   /* Hero fonas – be pulsuojančios animacijos */
   #hero img {
