@@ -605,4 +605,65 @@ a:active {
 .success-popup-inner .btn:hover {
   background: #f3e5f5 !important;
 }
+/* --- Formos klaidų stiliai (1e punktas) --- */
+
+.field-error {
+  color: #df1529;
+  font-size: 0.85rem;
+  margin-top: 2px;
+}
+
+.contact .form-control.is-invalid,
+.contact .rating-range.is-invalid {
+  border-color: #df1529 !important;
+  box-shadow: 0 0 0 1px rgba(223, 21, 41, 0.4);
+}
+
+/* --- Sėkmingo pateikimo pop-up (6 punktas) --- */
+
+.success-popup {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.35);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s ease;
+  z-index: 9990;
+}
+
+.success-popup.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.success-popup-inner {
+  background: linear-gradient(135deg, #8e24aa, #d81b60);
+  color: #ffffff;
+  padding: 20px 28px;
+  border-radius: 18px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
+  text-align: center;
+  min-width: 260px;
+}
+
+.success-popup-inner p {
+  margin: 0 0 10px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+
+.success-popup-inner .btn {
+  background: #ffffff !important;
+  color: #4a148c !important;
+  border-radius: 999px !important;
+  padding: 6px 18px;
+  font-size: 0.9rem;
+}
+
+.success-popup-inner .btn:hover {
+  background: #f3e5f5 !important;
+}
 
