@@ -739,35 +739,78 @@
           </div>
 
           <div class="col-lg-8">
-            <form action="forms/contact.php" method="post" class="php-email-form" data-aos="fade-up" data-aos-delay="200">
-              <div class="row gy-4">
+<form action="forms/contact.php" method="post" class="php-email-form" data-aos="fade-up" data-aos-delay="200">
+  <div class="row gy-4">
 
-                <div class="col-md-6">
-                  <input type="text" name="name" class="form-control" placeholder="Your Name" required="">
-                </div>
+    <!-- Vardas + pavardė -->
+    <div class="col-md-6">
+      <label class="form-label">Vardas</label>
+      <input type="text" name="first_name" class="form-control" placeholder="Jūsų vardas" required>
+    </div>
 
-                <div class="col-md-6 ">
-                  <input type="email" class="form-control" name="email" placeholder="Your Email" required="">
-                </div>
+    <div class="col-md-6">
+      <label class="form-label">Pavardė</label>
+      <input type="text" name="last_name" class="form-control" placeholder="Jūsų pavardė" required>
+    </div>
 
-                <div class="col-md-12">
-                  <input type="text" class="form-control" name="subject" placeholder="Subject" required="">
-                </div>
+    <!-- El. paštas + telefonas -->
+    <div class="col-md-6">
+      <label class="form-label">El. paštas</label>
+      <input type="email" name="email" class="form-control" placeholder="vardas.pavarde@pavyzdys.lt" required>
+    </div>
 
-                <div class="col-md-12">
-                  <textarea class="form-control" name="message" rows="6" placeholder="Message" required=""></textarea>
-                </div>
+    <div class="col-md-6">
+      <label class="form-label">Telefono numeris</label>
+      <input type="tel" name="phone" class="form-control" placeholder="+370..." required>
+    </div>
 
-                <div class="col-md-12 text-center">
-                  <div class="loading">Loading</div>
-                  <div class="error-message"></div>
-                  <div class="sent-message">Your message has been sent. Thank you!</div>
+    <!-- Adresas -->
+    <div class="col-md-12">
+      <label class="form-label">Adresas</label>
+      <input type="text" name="address" class="form-control" placeholder="Gatvė, miestas" required>
+    </div>
 
-                  <button type="submit">Send Message</button>
-                </div>
+    <!-- 3 vertinimo klausimai (skalė 1–10, slideriai) -->
+    <div class="col-md-12">
+      <h5 class="mt-3 mb-1">Įvertinkite (1–10):</h5>
+    </div>
 
-              </div>
-            </form>
+    <div class="col-md-12">
+      <label class="form-label rating-label">1. Mano CV dizainas</label>
+      <input type="range" class="form-range rating-range" name="rating_design" min="1" max="10" value="7">
+      <div class="d-flex justify-content-between rating-scale">
+        <span>1</span><span>10</span>
+      </div>
+    </div>
+
+    <div class="col-md-12">
+      <label class="form-label rating-label">2. Informacijos aiškumas</label>
+      <input type="range" class="form-range rating-range" name="rating_clarity" min="1" max="10" value="7">
+      <div class="d-flex justify-content-between rating-scale">
+        <span>1</span><span>10</span>
+      </div>
+    </div>
+
+    <div class="col-md-12">
+      <label class="form-label rating-label">3. Bendrai – bendras įspūdis</label>
+      <input type="range" class="form-range rating-range" name="rating_overall" min="1" max="10" value="7">
+      <div class="d-flex justify-content-between rating-scale">
+        <span>1</span><span>10</span>
+      </div>
+    </div>
+
+    <!-- Sistemos žinutės + Submit -->
+    <div class="col-md-12 text-center">
+      <div class="loading">Loading</div>
+      <div class="error-message"></div>
+      <div class="sent-message">Your message has been sent. Thank you!</div>
+
+      <button type="submit">Submit</button>
+    </div>
+
+  </div>
+</form>
+
           </div><!-- End Contact Form -->
 
         </div>
@@ -812,7 +855,6 @@
 
   <!-- Vendor JS Files -->
   <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="assets/vendor/php-email-form/validate.js"></script>
   <script src="assets/vendor/aos/aos.js"></script>
   <script src="assets/vendor/typed.js/typed.umd.js"></script>
   <script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>
@@ -823,7 +865,11 @@
   <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
 
   <!-- Main JS File -->
-  <script src="assets/js/main.js"></script>
+<script src="assets/js/main.js"></script>
+
+  <!-- Custom JS (visi pakeitimai tik šiame faile) -->
+<script src="assets/js/custom.js"></script>
+
 
 </body>
 

@@ -525,3 +525,84 @@ a:active {
     animation: none !important;
   }
 }
+/* --- Kontaktų formos naujų laukų stiliai --- */
+
+/* Formos label'ai */
+.contact .form-label {
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: #4a148c;
+}
+
+/* Visi input / textarea išlaiko vienodą atstumą */
+.contact .php-email-form .form-control,
+.contact .php-email-form .form-range {
+  margin-bottom: 4px;
+}
+
+/* Vertinimo (sliderių) antraštės ir skaičių eilutė */
+.contact .rating-label {
+  font-weight: 600;
+  color: #5e35b1;
+}
+
+.contact .rating-scale {
+  font-size: 0.85rem;
+  color: #555555;
+  margin-top: -4px;
+  margin-bottom: 8px;
+}
+
+/* Violetinis slideris (modernus būdas) */
+.contact .rating-range {
+  width: 100%;
+  accent-color: #8e24aa;   /* daugumai naršyklių užtenka */
+}
+/* --- Sėkmingo pateikimo pop-up pranešimas --- */
+
+.success-popup {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.35);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s ease;
+  z-index: 9990;
+}
+
+.success-popup.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.success-popup-inner {
+  background: linear-gradient(135deg, #8e24aa, #d81b60);
+  color: #ffffff;
+  padding: 20px 28px;
+  border-radius: 18px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
+  text-align: center;
+  min-width: 260px;
+}
+
+.success-popup-inner p {
+  margin: 0 0 10px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+
+.success-popup-inner .btn {
+  background: #ffffff !important;
+  color: #4a148c !important;
+  border-radius: 999px !important;
+  padding: 6px 18px;
+  font-size: 0.9rem;
+}
+
+.success-popup-inner .btn:hover {
+  background: #f3e5f5 !important;
+}
+
