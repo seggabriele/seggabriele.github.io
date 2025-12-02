@@ -336,6 +336,10 @@ function initMemoryGame() {
   const board       = gameSection.querySelector("#game-board");
   const movesSpan   = gameSection.querySelector("#game-moves");
   const matchesSpan = gameSection.querySelector("#game-matches");
+  const timeSpan    = gameSection.querySelector("#game-time");
+  const bestEasySpan = gameSection.querySelector("#best-easy");
+  const bestHardSpan = gameSection.querySelector("#best-hard");
+
   const startBtn    = gameSection.querySelector("#game-start");
   const resetBtn    = gameSection.querySelector("#game-reset");
   const messageBox  = gameSection.querySelector("#game-message");
@@ -351,6 +355,17 @@ function initMemoryGame() {
   let secondCard = null;
   let lockBoard = false;
   let started = false;
+
+  let secondsElapsed = 0;
+  let timerInterval = null;
+
+  let currentDifficulty = "easy";
+
+  // localStorage geriausi rezultatai
+  const bestScores = {
+    easy: null,
+    hard: null
+  };
 
   function getSelectedDifficulty() {
     const checked = [...difficultyRadios].find(r => r.checked);
@@ -369,6 +384,27 @@ function initMemoryGame() {
     if (matchesSpan) matchesSpan.textContent = String(matches);
   }
 
+  function updateTime() {
+    if (timeSpan) {
+      timeSpan.textContent = String(secondsElapsed);
+    }
+  }
+
+  function startTimer() {
+    clearInterval(timerInterval);
+    secondsElapsed = 0;
+    updateTime();
+    timerInterval = setInterval(() => {
+      secondsElapsed++;
+      updateTime();
+    }, 1000);
+  }
+
+  function stopTimer() {
+    clearInterval(timerInterval);
+    timerInterval = null;
+  }
+
   function clearMessage() {
     if (!messageBox) return;
     messageBox.textContent = "";
@@ -377,7 +413,7 @@ function initMemoryGame() {
 
   function showWinMessage() {
     if (!messageBox) return;
-    messageBox.textContent = "Laimėjote! Visos poros surastos 🎉";
+    messageBox.textContent = `Laimėjote! Visos poros surastos. Ėjimai: ${moves}, laikas: ${secondsElapsed} s 🎉`;
     messageBox.classList.add("win");
   }
 
@@ -395,16 +431,61 @@ function initMemoryGame() {
     lockBoard = false;
   }
 
+  // localStorage – geriausi rezultatai
+  function loadBestScores() {
+    try {
+      const easy = parseInt(localStorage.getItem("memoryBest_easy"), 10);
+      const hard = parseInt(localStorage.getItem("memoryBest_hard"), 10);
+
+      if (!isNaN(easy)) bestScores.easy = easy;
+      if (!isNaN(hard)) bestScores.hard = hard;
+    } catch (e) {
+      // jei localStorage nepasiekiamas – tiesiog ignoruojam
+    }
+    refreshBestScoreUI();
+  }
+
+  function refreshBestScoreUI() {
+    if (bestEasySpan) {
+      bestEasySpan.textContent = bestScores.easy != null ? `${bestScores.easy} ėjimai` : "–";
+    }
+    if (bestHardSpan) {
+      bestHardSpan.textContent = bestScores.hard != null ? `${bestScores.hard} ėjimai` : "–";
+    }
+  }
+
+  function updateBestScore(difficulty, currentMoves) {
+    if (!["easy", "hard"].includes(difficulty)) return;
+
+    const existing = bestScores[difficulty];
+    if (existing == null || currentMoves < existing) {
+      bestScores[difficulty] = currentMoves;
+      try {
+        localStorage.setItem(`memoryBest_${difficulty}`, String(currentMoves));
+      } catch (e) {
+        // ignore
+      }
+      refreshBestScoreUI();
+    }
+  }
+
   function generateBoard() {
     if (!board) return;
 
     const difficulty = getSelectedDifficulty();
+    currentDifficulty = difficulty;
+
     const pairs = difficulty === "hard" ? 12 : 6; // sunkus – 12 porų, lengvas – 6
     totalPairs = pairs;
 
     resetStats();
     clearMessage();
     resetTurn();
+
+    // laikmatis atstatomas, bet nestartuojamas, kol nepaspaustas Start
+    stopTimer();
+    secondsElapsed = 0;
+    updateTime();
 
     // Pasirenkam tiek simbolių, kiek reikia porų
     const chosen = symbols.slice(0, pairs);
@@ -474,7 +555,9 @@ function initMemoryGame() {
       resetTurn();
 
       if (matches === totalPairs) {
+        stopTimer();
         showWinMessage();
+        updateBestScore(currentDifficulty, moves);
       }
     } else {
       setTimeout(() => {
@@ -492,15 +575,20 @@ function initMemoryGame() {
     });
   });
 
-  // Start mygtukas – pradeda žaidimą su jau sukurta lenta
+  // Start mygtukas – pradeda žaidimą su jau sukurta lenta ir paleidžia laikmatį
   if (startBtn) {
     startBtn.addEventListener("click", function () {
       started = true;
       clearMessage();
-      messageBox.textContent = "Žaidimas pradėtas – surask visas poras!";
-      messageBox.classList.add("info");
+      if (messageBox) {
+        messageBox.textContent = "Žaidimas pradėtas – surask visas poras!";
+        messageBox.classList.add("info");
+      }
       startBtn.disabled = true;
-      resetBtn.disabled = false;
+      if (resetBtn) resetBtn.disabled = false;
+
+      // Laikmatis startuoja tik dabar
+      startTimer();
     });
   }
 
@@ -515,9 +603,13 @@ function initMemoryGame() {
       }
       if (startBtn) startBtn.disabled = true;
       resetBtn.disabled = false;
+
+      // naujam žaidimui laikmatį paleidžiam iš naujo
+      startTimer();
     });
   }
 
-  // Pradinė lenta (lengvas lygis)
+  // Pradinė lenta (lengvas lygis) + užkraunam geriausius rezultatus iš localStorage
+  loadBestScores();
   generateBoard();
 }
