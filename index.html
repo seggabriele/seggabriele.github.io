@@ -819,6 +819,59 @@
 
     </section><!-- /Contact Section -->
 
+ <!-- Memory Game Section -->
+    <section id="memory-game" class="memory-game section light-background">
+
+      <div class="container" data-aos="fade-up">
+        <div class="section-title">
+          <h2>Mano žaidimas</h2>
+          <p>Atminties kortelių žaidimas (Flip Card Memory)</p>
+        </div>
+
+        <div class="row gy-4 align-items-start">
+
+          <!-- Valdikliai ir statistika -->
+          <div class="col-lg-4">
+            <div class="game-controls">
+
+              <label class="form-label d-block mb-2">Pasirinkite sudėtingumo lygį:</label>
+              <div class="btn-group difficulty-options" role="group" aria-label="Sudėtingumo lygis">
+                <input type="radio" class="btn-check" name="game-difficulty" id="difficulty-easy" value="easy" checked>
+                <label class="btn btn-outline-light" for="difficulty-easy">Lengvas (4×3)</label>
+
+                <input type="radio" class="btn-check" name="game-difficulty" id="difficulty-hard" value="hard">
+                <label class="btn btn-outline-light" for="difficulty-hard">Sunkus (6×4)</label>
+              </div>
+
+              <div class="mt-3 d-flex flex-wrap gap-2">
+                <button type="button" id="game-start" class="btn btn-primary">Start</button>
+                <button type="button" id="game-reset" class="btn btn-outline-secondary" disabled>Atnaujinti</button>
+              </div>
+
+              <div class="game-stats mt-4">
+                <h5>Statistika</h5>
+                <p>Ėjimai (bandymai): <span id="game-moves">0</span></p>
+                <p>Sutapusios poros: <span id="game-matches">0</span></p>
+              </div>
+
+              <div id="game-message" class="game-message mt-3"></div>
+            </div>
+          </div>
+
+          <!-- Žaidimo lenta -->
+          <div class="col-lg-8">
+            <div class="game-board-wrapper">
+              <div class="game-board grid-easy" id="game-board">
+                <!-- Kortelės bus sugeneruotos JavaScript'u -->
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </section><!-- /Memory Game Section -->
+
   </main>
 
   <footer id="footer" class="footer position-relative light-background">

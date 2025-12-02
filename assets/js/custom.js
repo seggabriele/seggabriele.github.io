@@ -1,10 +1,19 @@
 // assets/js/custom.js
 
 document.addEventListener("DOMContentLoaded", function () {
+  initContactForm();
+  initMemoryGame();
+});
+
+/* ============================================
+   Kontaktų forma – validacija, vidurkis, popup
+   ============================================ */
+
+function initContactForm() {
   const form = document.querySelector("#contact .php-email-form");
   if (!form) return;
 
-  // ---- Laukai ----
+  // Formos laukai
   const firstNameInput  = form.elements["first_name"];
   const lastNameInput   = form.elements["last_name"];
   const emailInput      = form.elements["email"];
@@ -15,16 +24,16 @@ document.addEventListener("DOMContentLoaded", function () {
   const ratingOverall   = form.elements["rating_overall"];
   const submitBtn       = form.querySelector("button[type='submit']");
 
-  // pradiniu atveju Submit išjungtas (3 punktas)
+  // Submit pradžioje neaktyvus
   if (submitBtn) submitBtn.disabled = true;
 
-  // ---- Rezultatų blokas po forma (4–5 užduotys) ----
+  // Rezultatų blokas po forma (4–5 užduotys)
   const resultBox = document.createElement("div");
   resultBox.id = "form-result";
   resultBox.className = "mt-3 p-3 bg-light";
   form.appendChild(resultBox);
 
-  // ---- Sėkmingo pateikimo pop-up (6 užduotis) ----
+  // Pop-up sėkmingam pateikimui (6 užduotis)
   const popup = document.createElement("div");
   popup.id = "success-popup";
   popup.className = "success-popup";
@@ -42,16 +51,18 @@ document.addEventListener("DOMContentLoaded", function () {
     popup.classList.remove("show");
   }
 
-  closeBtn.addEventListener("click", hidePopup);
+  if (closeBtn) {
+    closeBtn.addEventListener("click", hidePopup);
+  }
 
-  // ---- Pagalbinė funkcija XSS apsaugai ----
+  // Pagalbinė funkcija tekstui
   function escapeHtml(str) {
     const div = document.createElement("div");
     div.textContent = str;
     return div.innerHTML;
   }
 
-  // ---- Klaidų blokeliai prie laukų ----
+  // Klaidų blokeliai po laukais
   function createErrorEl(input) {
     const err = document.createElement("div");
     err.className = "field-error";
@@ -67,7 +78,7 @@ document.addEventListener("DOMContentLoaded", function () {
     phone:      { el: createErrorEl(phoneInput),     hasError: true }
   };
 
-  // ---- Bendras submit mygtuko aktyvumo atnaujinimas ----
+  // Submit mygtuko aktyvumo tikrinimas
   function updateSubmitState() {
     const allOk =
       !errors.first_name.hasError &&
@@ -81,7 +92,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  // ---- Validacija: vardas ir pavardė (tik raidės, ne tuščia) ----
+  // Vardas / pavardė – tik raidės
   const nameRegex = /^[A-Za-zĄČĘĖĮŠŲŪŽąčęėįšųūž\-]+$/;
 
   function validateFirstName() {
@@ -128,7 +139,7 @@ document.addEventListener("DOMContentLoaded", function () {
     updateSubmitState();
   }
 
-  // ---- El. pašto formatas ----
+  // El. paštas
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   function validateEmail() {
@@ -153,7 +164,7 @@ document.addEventListener("DOMContentLoaded", function () {
     updateSubmitState();
   }
 
-  // ---- Adresas – tiesiog ne tuščias tekstas ----
+  // Adresas – ne tuščias
   function validateAddress() {
     const v = addressInput.value.trim();
     let msg = "";
@@ -174,35 +185,32 @@ document.addEventListener("DOMContentLoaded", function () {
     updateSubmitState();
   }
 
-  // ---- Telefono numerio formatavimas ir validacija (2 punktas) ----
-  // Lietuviškas šablonas: +370 6xx xxxxx  -> skaitmenys: 3706 + 7 = 11
+  // Telefono numerio formatavimas ir validacija
   function formatAndValidatePhone() {
     let raw = phoneInput.value;
-    let digits = raw.replace(/\D/g, "");        // paliekam tik skaitmenis
+    let digits = raw.replace(/\D/g, "");
 
-    // leidžiam suvesti 86... -> konvertuojam į 3706...
+    // 86xxxxxxx -> 3706xxxxxx
     if (digits.startsWith("86")) {
-      digits = "370" + digits.slice(1);        // 86xxxxxxx -> 3706xxxxxx
+      digits = "370" + digits.slice(1);
     }
 
-    // apribojam max 11 skaitmenų
+    // max 11 skaitmenų
     digits = digits.slice(0, 11);
 
-    // suformuojam rodymą vartotojui
     let formatted = "";
     if (digits.length > 0) {
       if (digits.startsWith("370")) {
         formatted = "+370";
         if (digits.length >= 4) {
-          formatted += " " + digits[3];        // 6
+          formatted += " " + digits[3]; // 6
         }
         if (digits.length >= 5) {
-          // dar du skaitmenys po 6
           const extra = digits.slice(4, Math.min(6, digits.length));
           formatted += extra;
         }
         if (digits.length >= 7) {
-          formatted += " " + digits.slice(6);  // likę 5 skaitmenys
+          formatted += " " + digits.slice(6);
         }
       } else {
         formatted = "+" + digits;
@@ -211,9 +219,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     phoneInput.value = formatted;
 
-    // Patikrinam galutinį formatą
     let msg = "";
-    const validFull = /^3706\d{7}$/.test(digits); // 3706 + 7 skaitmenys
+    const validFull = /^3706\d{7}$/.test(digits); // 3706 + 7 skaitmenų
 
     if (!digits) {
       msg = "Įveskite telefono numerį.";
@@ -234,28 +241,27 @@ document.addEventListener("DOMContentLoaded", function () {
     updateSubmitState();
   }
 
-  // ---- Pririšam validaciją „realiu laiku“ (1 punktas) ----
+  // Real-time validacija
   firstNameInput.addEventListener("input", validateFirstName);
   lastNameInput.addEventListener("input", validateLastName);
   emailInput.addEventListener("input", validateEmail);
   addressInput.addEventListener("input", validateAddress);
-
   phoneInput.addEventListener("input", formatAndValidatePhone);
   phoneInput.addEventListener("blur", formatAndValidatePhone);
 
-  // paleidžiam pradinei būsenai
+  // Pradinė būsena
   validateFirstName();
   validateLastName();
   validateEmail();
   validateAddress();
   formatAndValidatePhone();
 
-  // ---- Formos submit (4–5–6 užduotys) ----
+  // Submit įvykis – 4, 5 ir 6 užduotys
   form.addEventListener("submit", function (e) {
     e.preventDefault();
-    e.stopImmediatePropagation(); // užblokuojam validate.js ir tikrą POST
+    e.stopImmediatePropagation(); // sustabdom validate.js ir tikrą POST
 
-    // paskutinį kartą patikrinam, kad tikrai viskas gerai
+    // paskutinė validacija
     validateFirstName();
     validateLastName();
     validateEmail();
@@ -270,10 +276,9 @@ document.addEventListener("DOMContentLoaded", function () {
       errors.phone.hasError;
 
     if (anyError) {
-      return; // jeigu yra klaidų – neapdorojam ir nerodom popup
+      return;
     }
 
-    // 📥 Surenkam visas įvestis
     const firstName = firstNameInput.value.trim();
     const lastName  = lastNameInput.value.trim();
     const email     = emailInput.value.trim();
@@ -284,7 +289,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const rClarity  = Number(ratingClarity.value || 0);
     const rOverall  = Number(ratingOverall.value || 0);
 
-    // 5 užduotis – vidurkis
     const averageRating = ((rDesign + rClarity + rOverall) / 3).toFixed(1);
 
     const formData = {
@@ -315,8 +319,205 @@ document.addEventListener("DOMContentLoaded", function () {
       <p><strong>${escapeHtml(fullName)}:</strong> vidurkis: ${averageRating}</p>
     `;
 
-    // 6 užduotis – parodyti pop-up tik sėkmingo pateikimo atveju
+    // Parodom pop-up
     popup.classList.add("show");
     setTimeout(hidePopup, 4000);
   });
-});
+}
+
+/* ============================================
+   Atminties kortelių žaidimas
+   ============================================ */
+
+function initMemoryGame() {
+  const gameSection = document.querySelector("#memory-game");
+  if (!gameSection) return;
+
+  const board       = gameSection.querySelector("#game-board");
+  const movesSpan   = gameSection.querySelector("#game-moves");
+  const matchesSpan = gameSection.querySelector("#game-matches");
+  const startBtn    = gameSection.querySelector("#game-start");
+  const resetBtn    = gameSection.querySelector("#game-reset");
+  const messageBox  = gameSection.querySelector("#game-message");
+  const difficultyRadios = gameSection.querySelectorAll("input[name='game-difficulty']");
+
+  // mažiausiai 6 unikalūs elementai – čia 12, kad užtektų sunkiausiam lygiui
+  const symbols = ["💻","🎧","📚","☕","🎮","🛰️","📷","🎵","🧠","📱","🌌","🎓"];
+
+  let moves = 0;
+  let matches = 0;
+  let totalPairs = 0;
+  let firstCard = null;
+  let secondCard = null;
+  let lockBoard = false;
+  let started = false;
+
+  function getSelectedDifficulty() {
+    const checked = [...difficultyRadios].find(r => r.checked);
+    return checked ? checked.value : "easy";
+  }
+
+  function resetStats() {
+    moves = 0;
+    matches = 0;
+    if (movesSpan)   movesSpan.textContent = "0";
+    if (matchesSpan) matchesSpan.textContent = "0";
+  }
+
+  function updateStats() {
+    if (movesSpan)   movesSpan.textContent = String(moves);
+    if (matchesSpan) matchesSpan.textContent = String(matches);
+  }
+
+  function clearMessage() {
+    if (!messageBox) return;
+    messageBox.textContent = "";
+    messageBox.classList.remove("win", "info");
+  }
+
+  function showWinMessage() {
+    if (!messageBox) return;
+    messageBox.textContent = "Laimėjote! Visos poros surastos 🎉";
+    messageBox.classList.add("win");
+  }
+
+  function shuffle(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  }
+
+  function resetTurn() {
+    firstCard = null;
+    secondCard = null;
+    lockBoard = false;
+  }
+
+  function generateBoard() {
+    if (!board) return;
+
+    const difficulty = getSelectedDifficulty();
+    const pairs = difficulty === "hard" ? 12 : 6; // sunkus – 12 porų, lengvas – 6
+    totalPairs = pairs;
+
+    resetStats();
+    clearMessage();
+    resetTurn();
+
+    // Pasirenkam tiek simbolių, kiek reikia porų
+    const chosen = symbols.slice(0, pairs);
+    let cards = chosen.concat(chosen);
+    shuffle(cards);
+
+    // Atitinkamas grid
+    board.classList.toggle("grid-easy", difficulty === "easy");
+    board.classList.toggle("grid-hard", difficulty === "hard");
+
+    // Išvalom ir sukuriam korteles
+    board.innerHTML = "";
+
+    cards.forEach(symbol => {
+      const card = document.createElement("button");
+      card.type = "button";
+      card.className = "memory-card";
+      card.dataset.symbol = symbol;
+
+      card.innerHTML = `
+        <div class="card-inner">
+          <div class="card-front"></div>
+          <div class="card-back">${symbol}</div>
+        </div>
+      `;
+
+      card.addEventListener("click", handleCardClick);
+      board.appendChild(card);
+    });
+
+    // Start dar nepradėtas
+    started = false;
+    if (startBtn) startBtn.disabled = false;
+    if (resetBtn) resetBtn.disabled = true;
+  }
+
+  function handleCardClick(e) {
+    if (!started) {
+      // jei dar nepaspaustas Start – nekreipiam dėmesio
+      return;
+    }
+
+    const card = e.currentTarget;
+    if (lockBoard) return;
+    if (card.classList.contains("matched")) return;
+    if (card === firstCard) return;
+
+    card.classList.add("flipped");
+
+    if (!firstCard) {
+      firstCard = card;
+      return;
+    }
+
+    secondCard = card;
+    lockBoard = true;
+    moves++;
+    updateStats();
+
+    const isMatch = firstCard.dataset.symbol === secondCard.dataset.symbol;
+
+    if (isMatch) {
+      firstCard.classList.add("matched", "disabled");
+      secondCard.classList.add("matched", "disabled");
+      matches++;
+      updateStats();
+      resetTurn();
+
+      if (matches === totalPairs) {
+        showWinMessage();
+      }
+    } else {
+      setTimeout(() => {
+        firstCard.classList.remove("flipped");
+        secondCard.classList.remove("flipped");
+        resetTurn();
+      }, 900);
+    }
+  }
+
+  // Sudėtingumo pakeitimas – nauja lenta, atstatoma būsena
+  difficultyRadios.forEach(radio => {
+    radio.addEventListener("change", function () {
+      generateBoard();
+    });
+  });
+
+  // Start mygtukas – pradeda žaidimą su jau sukurta lenta
+  if (startBtn) {
+    startBtn.addEventListener("click", function () {
+      started = true;
+      clearMessage();
+      messageBox.textContent = "Žaidimas pradėtas – surask visas poras!";
+      messageBox.classList.add("info");
+      startBtn.disabled = true;
+      resetBtn.disabled = false;
+    });
+  }
+
+  // Atnaujinti – nauja supainiota lenta ir iškart prasidedantis žaidimas
+  if (resetBtn) {
+    resetBtn.addEventListener("click", function () {
+      generateBoard();
+      started = true;
+      if (messageBox) {
+        messageBox.textContent = "Nauja žaidimo partija pradėta.";
+        messageBox.classList.add("info");
+      }
+      if (startBtn) startBtn.disabled = true;
+      resetBtn.disabled = false;
+    });
+  }
+
+  // Pradinė lenta (lengvas lygis)
+  generateBoard();
+}

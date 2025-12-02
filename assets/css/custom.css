@@ -666,4 +666,154 @@ a:active {
 .success-popup-inner .btn:hover {
   background: #f3e5f5 !important;
 }
+/* ============================
+   Atminties žaidimo (Flip Card) stiliai
+   ============================ */
 
+.memory-game {
+  padding-top: 60px;
+  padding-bottom: 80px;
+}
+
+.memory-game .game-controls {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 20px 22px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+}
+
+.memory-game .difficulty-options .btn {
+  border-radius: 999px;
+  border-color: rgba(255, 255, 255, 0.6);
+  color: #5e35b1;
+  background: linear-gradient(135deg, #ede7f6, #f3e5f5);
+}
+
+.memory-game .difficulty-options .btn:hover,
+.memory-game .difficulty-options .btn-check:checked + .btn {
+  color: #ffffff;
+  background: linear-gradient(135deg, #8e24aa, #ab47bc);
+  border-color: transparent;
+}
+
+.memory-game .game-stats h5 {
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: #4a148c;
+}
+
+.memory-game .game-stats p {
+  margin-bottom: 4px;
+}
+
+/* Žaidimo lenta */
+.game-board-wrapper {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 18px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+}
+
+.game-board {
+  display: grid;
+  gap: 12px;
+  justify-content: center;
+}
+
+/* Lengvas – 4x3 */
+.game-board.grid-easy {
+  grid-template-columns: repeat(4, minmax(60px, 100px));
+}
+
+/* Sunkus – 6x4 */
+.game-board.grid-hard {
+  grid-template-columns: repeat(6, minmax(50px, 80px));
+}
+
+/* Kortelė */
+.memory-card {
+  position: relative;
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  perspective: 900px;
+}
+
+.memory-card.disabled {
+  pointer-events: none;
+}
+
+.memory-card .card-inner {
+  position: relative;
+  width: 100%;
+  padding-top: 120%; /* kad būtų kvadratas */
+  transform-style: preserve-3d;
+  transition: transform 0.4s ease;
+}
+
+.memory-card .card-front,
+.memory-card .card-back {
+  position: absolute;
+  inset: 0;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backface-visibility: hidden;
+}
+
+/* Nugarėlė */
+.memory-card .card-front {
+  background: linear-gradient(135deg, #8e24aa, #d81b60);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.25);
+}
+
+.memory-card .card-front::before {
+  content: "★";
+  color: #ffffff;
+  font-size: 1.8rem;
+}
+
+/* Priekinė pusė su simboliu */
+.memory-card .card-back {
+  background: #ffffff;
+  transform: rotateY(180deg);
+  font-size: 2.1rem;
+}
+
+/* Apvertimas */
+.memory-card.flipped .card-inner {
+  transform: rotateY(180deg);
+}
+
+/* Sutapusios kortelės paryškinamos */
+.memory-card.matched .card-back {
+  box-shadow: 0 0 0 3px rgba(142, 36, 170, 0.9);
+}
+
+/* Laimėjimo pranešimas */
+.game-message {
+  min-height: 24px;
+  font-weight: 600;
+  color: #2e7d32;
+}
+
+.game-message.win {
+  color: #2e7d32;
+}
+
+.game-message.info {
+  color: #5e35b1;
+}
+
+/* Start / Atnaujinti mygtukai */
+#game-start,
+#game-reset {
+  border-radius: 999px;
+}
+
+#game-reset:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
